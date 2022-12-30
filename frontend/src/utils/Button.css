@@ -1,0 +1,32 @@
+.button {
+    border-radius: 12px;
+    border: 1px solid #333333;
+    color: #333333;
+    font-size: 8px;
+    text-decoration: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+.button:hover {
+    color: white; 
+    background-color: #333333;
+}
+
+.home_button {
+    padding-top: 5px; 
+    padding-bottom: 5px; 
+    padding-left: 10px; 
+    padding-right: 10px;
+}
+
+.draw {
+    padding-left: 10px; 
+    padding-right: 10px;
+}
+
+.draw:hover {
+    cursor: pointer;
+}
