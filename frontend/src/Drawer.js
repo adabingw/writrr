@@ -19,13 +19,13 @@ let alphabet = [
     'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p', 'Q', 'q', 'R', 'r', 'S', 's', 'W', 'w',
     'X', 'x', 'Y', 'y', 'Z', 'z'
 ]
-let alphabet_uri = []
 
 function Drawer() {
 
     const [tool, setTool] = React.useState('pen');
     const [lines, setLines] = React.useState([]);
     const [curr, setCurr] = React.useState(0); 
+    const [end, setEnd] = React.useState(false); 
     const [alert, setAlert] = React.useState({
         type: 'error',
         text: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
@@ -41,7 +41,8 @@ function Drawer() {
             text: '',
             show: false
         })
-        cont()
+        setCurr((curr) => curr + 1) 
+        clear()
     }
         
     function onShowAlert(type, text) {
@@ -52,19 +53,23 @@ function Drawer() {
         })
     }
 
-    const cont = () => {
-        console.log('here')
-        setCurr((curr) => curr + 1) 
-        const uri = stageRef.current.toDataURL();
-        alphabet_uri.push(uri)
-        clear()
-    }
+    window.addEventListener("beforeunload", (ev) => {  
+        ev.preventDefault();
+        console.log("clean")
+        let type = "clean"
+        axios.post("http://localhost:5000/drawer", {
+            inputText: type,
+            symbol: alphabet[curr]
+        }).then((res) => {
+            console.log("res", res);
+        }).catch((err) => {
+            console.log(err);
+        });
+    });
 
-    const submit = () => {
-        console.log(curr)
-        if (lines.length == 0) {
-            onShowAlert('warning', "submit empty? this letter will be styled in default Arial")
-        } else cont()
+    function getButton() {
+        if (end) return <input name="submit" required type="submit" className="submit" value="submit" />
+        else return <h1 className="submit" onClick={(e) => handleSubmit(e)}>next</h1>
     }
 
     // function to download the png drawn on the canva
@@ -84,38 +89,38 @@ function Drawer() {
         downloadURI(uri, 'stage.png');
     };
 
-    // handling submit
     const handleSubmit = (e) => {
         e.preventDefault()
-        const uri = stageRef.current.toDataURL();
-        const formData = uri;
-        // const formData = new FormData(e.target);
-        console.log(formData)
+        if (lines.length == 0) {
+            onShowAlert('warning', "submit empty? this letter will be styled in default Arial")
+        } else {
+            if (curr == 44) {
+                setEnd(true)
+            } else setCurr((curr) => curr + 1) 
+            const uri = stageRef.current.toDataURL();
+            const formData = uri;
 
-        const Upload = async() => {
-        //   await fetch('/http://localhost:5000/drawer', {
-        //     method: 'POST',
-        //     body: formData
-        //   }).then(resp => {
-        //     // resp.json().then(data => {
-        //     //     console.log(data)
-        //     // })
-        //     console.log(resp)
-        //   })
-            const config = {
-                headers: {'Access-Control-Allow-Origin': '*'}
-            };      
-            console.log(config)
-            axios.post("http://localhost:5000/drawer", {
-                inputText: formData,
-            }, config).then((res) => {
-                console.log("res", res);
-            }).catch((err) => {
-                console.log(err);
-            });
+            clear()
+
+            const Upload = async() => {
+                axios.post("http://localhost:5000/drawer", {
+                    inputText: formData,
+                    symbol: alphabet[curr]
+                }).then((res) => {
+                    console.log("res", res);
+                }).catch((err) => {
+                    console.log(err);
+                });
+            }
+
+            Upload();
         }
+    }
 
-        Upload();
+    // handling submit
+    const submitAll = (e) => {
+        e.preventDefault()
+        console.log("owie")
     }
 
     // clearing canva
@@ -125,7 +130,6 @@ function Drawer() {
         stageRef.current.clear()
         stageRef.current.clearCache() 
         setLines([])
-        console.log("D:")
     };
 
     // touch screen events 
@@ -178,7 +182,7 @@ function Drawer() {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={submitAll}>
             <div className="stage_div">
             <h1>write for letter '{alphabet[curr]}'</h1>
             <Stage
@@ -222,8 +226,7 @@ function Drawer() {
                     <option value="pen">Pen</option>
                     <option value="eraser">Eraser</option>
                 </select>
-                <h1 className="submit" onClick={() => submit()}>submit</h1>
-                <input name="submit" required type="submit" className="submit" value="submit" />
+                {getButton()}
             </div>
             <Alert
                 header={'woah - '}

@@ -3,29 +3,29 @@ import sys
 import tensorflow as tf
 
 # Check command-line arguments
-if len(sys.argv) != 2:
-    sys.exit("Usage: python recognition.py model")
-model = tf.keras.models.load_model(sys.argv[1])
 
-# Colors
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
+def recognition(): 
 
+    model = tf.keras.models.load_model('./model.h5')
 
-OFFSET = 20
-CELL_SIZE = 10
+    # Colors
+    BLACK = (0, 0, 0)
+    WHITE = (255, 255, 255)
 
-classification = None
+    OFFSET = 20
+    CELL_SIZE = 10
 
-while True:
+    classification = None
 
-    
-    
-    # Generate classification
-    classification = model.predict(
-        [np.array(handwriting).reshape(1, 28, 28, 1)]
-    ).argmax()
+    while True:
 
-    # Show classification if one exists
-    if classification is not None:
-        print("cannot classify :c")
+        
+        
+        # Generate classification
+        classification = model.predict(
+            [np.array(handwriting).reshape(1, 28, 28, 1)]
+        ).argmax()
+
+        # Show classification if one exists
+        if classification is not None:
+            print("cannot classify :c")

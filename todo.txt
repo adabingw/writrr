@@ -1,18 +1,23 @@
 backend: 
-- receive image from frontend 
-- get image analysis 
-- send image analysis to frontend 
-
-frontend: 
-- send image to backend 
-- receive analysis from backend 
-- cycle thru the alphabet and stuff 
 
 ml: 
 - training 
 - receive images 
 - analysis
-- send analysis 
+- generate writing 
+- generate png 
+- generate ttf 
+- send to frontend 
 
 writing generating: 
-- TBD 
+- create page 
+- send text to backend 
+- receive image from backend 
+- enable download
+    * png 
+    * ttf 
+
+upload writing: 
+- allow upload writing (png) 
+- send images to backend 
+- image editing 
