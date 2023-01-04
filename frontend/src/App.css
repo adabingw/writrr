@@ -65,9 +65,57 @@ select {
   text-decoration: none;
   padding-left: 10px; 
   padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 
 .submit:hover {
   color: white; 
   background-color: #333333;
+  cursor: pointer;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+Link {
+  text-decoration: none; 
+
+}
+
+.head_sub {
+  font-size: 30px;
+  margin-top: -15px;
+  /* margin-bottom: -5px; */
+}
+
+.subheader {
+  font-size: 20px;
+}
+
+.generator {
+  border-radius: 12px;
+  padding: 12px;
+  width: 650px;
+  text-align: center;
+  font-size: 20px;
+}
+
+.generate_div {
+  display: flex; 
+  flex-direction: column; 
+  justify-content: center;
+  align-items: center;
+  justify-items: center;
+  justify-self: center;
+  align-self: center;
+  align-content: center;
+}
+
+.writing {
+  border: 1px solid red;
+  max-height: 50vh;
+  margin-top: 30px;
 }

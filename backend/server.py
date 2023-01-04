@@ -3,7 +3,8 @@ from flask import Flask, request
 from flask_cors import CORS, cross_origin
 import sqlite3
 import base64
-
+import os 
+import opencv 
   
 # Initializing flask app
 app = Flask(__name__)
@@ -92,12 +93,26 @@ def index():
 def drawer(): 
     createTable()
     if request.method == "POST": 
-        print("post") 
+        print("post in draw") 
         data = request.json 
-        path = "./img/alpha_{}.png".format(data['symbol'])
+        padding = 0
+        if data['symbol'].isupper(): 
+            padding = 0
+        else:
+            padding = 1
+        
+        path = "./img/{}{}.png".format(data['symbol'], padding)
             
         if data['inputText'] == "clean": 
             cleanTable()
+            dir = "cv_img/"         
+            for file in os.listdir(dir):                
+                os.remove(file)
+                
+            dir = "img/"         
+            for file in os.listdir(dir):                
+                os.remove(file)
+
         else: 
             
             uri = data['inputText'][22:]
@@ -116,6 +131,35 @@ def drawer():
             else: 
                 print("data doesn't exist")
                 insertData(data['symbol'], uri)
+        return "ok"
+
+@app.route('/writer', methods=['POST'])
+@cross_origin()
+def writer(): 
+    if request.method == "POST": 
+        print("post in write") 
+        data = request.json 
+        text = data['text'] 
+        print(text)
+        
+        path = "../frontend/src/images/result.png"
+        if(os.path.exists(path)):
+            os.remove(path)
+        
+        dir = "cv_img/"         
+        for file in os.listdir(dir):       
+            path = os.path.join(dir, file)         
+            os.remove(path)
+        
+        for i, t in enumerate(text):
+            padding = 0
+            if t.isupper(): 
+                padding = 0
+            else: 
+                padding = 1
+            path = "img/{}{}.png".format(t, padding)
+            opencv.draw(path, i, t)            
+        opencv.generate("cv_img/")
         return "ok"
 
 # Running app

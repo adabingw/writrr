@@ -10,12 +10,11 @@ ml:
 - send to frontend 
 
 writing generating: 
-- create page 
-- send text to backend 
-- receive image from backend 
-- enable download
-    * png 
-    * ttf 
+
+opencv stuff: 
+- smaller font when text large 
+- error handling (no symbol) 
+- scaling/styling 
 
 upload writing: 
 - allow upload writing (png) 

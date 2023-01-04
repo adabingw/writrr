@@ -5,7 +5,7 @@ import {
   Route,
   Link
 } from 'react-router-dom';
-import { Stage, Layer, Line, Text } from 'react-konva';
+import { Stage, Layer, Line, Text, Rect } from 'react-konva';
 import axios from "axios";
 import Alert from "react-popup-alert"
 
@@ -68,7 +68,11 @@ function Drawer() {
     });
 
     function getButton() {
-        if (end) return <input name="submit" required type="submit" className="submit" value="submit" />
+        if (end) return (
+            <Link to="/drawer">
+                <input name="submit" required type="submit" className="submit" value="submit" />
+            </Link>
+        )
         else return <h1 className="submit" onClick={(e) => handleSubmit(e)}>next</h1>
     }
 
@@ -184,7 +188,8 @@ function Drawer() {
     return (
         <form onSubmit={submitAll}>
             <div className="stage_div">
-            <h1>write for letter '{alphabet[curr]}'</h1>
+            <Link to="/"> <h1 className="head_sub">WRITRR</h1> </Link>
+            <h1 className="subheader">write for letter '{alphabet[curr]}'</h1>
             <Stage
                 width={window.innerWidth/2}
                 height={window.innerHeight/2}
@@ -194,10 +199,18 @@ function Drawer() {
                 onTouchStart={handleTouchStart}
                 onTouchMove={handleTouchMove} 
                 onTouchEnd={handleTouchEnd}
+                
                 id="stage"
                 ref={stageRef}
                 className="stage" >
                 <Layer>
+                <Rect
+                    x={0}
+                    y={0}
+                    width={window.innerWidth}
+                    height={window.innerHeight}
+                    fill="white"
+                    shadowBlur={0}   />
                 {lines.map((line, i) => (
                     <Line
                         key={i}

@@ -6,6 +6,7 @@ import {
   Link
 } from 'react-router-dom';
 
+import Writer from './Writer.js'
 import Drawer from './Drawer.js'
 import Home from './Home.js'
 import Error from './Error.js'
@@ -45,6 +46,7 @@ function App() {
               <Routes>
                 <Route exact path="/" element={<Home />} />
                 <Route exact path="/drawer" element={<Drawer />} />
+                <Route exact path="/writer" element={<Writer />} />
                 <Route exact_path="/*" element={<Error />} />
               </Routes>
             </Router>
