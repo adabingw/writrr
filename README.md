@@ -7,5 +7,6 @@ Technologies  used:
 * Flask
 * SQLite
 * OpenCV
+* Tensorflow EMNIST Dataset
 
 Run `python server.py` to start the server.
