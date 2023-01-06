@@ -7,7 +7,7 @@ Technologies  used:
 * Flask
 * SQLite
 * OpenCV
-* Tensorflow EMNIST Dataset
+* Tensorflow EMNIST Dataset (in progress)
 
 <img src="https://i.imgur.com/efKDzy3.jpg" alt="interface" width="800"/>
 
