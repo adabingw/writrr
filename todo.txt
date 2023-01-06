@@ -12,9 +12,6 @@ ml:
 writing generating: 
 
 opencv stuff: 
-- smaller font when text large 
-- error handling (no symbol) 
-- scaling/styling 
 
 upload writing: 
 - allow upload writing (png) 

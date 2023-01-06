@@ -1,47 +1,36 @@
-import React, { useState, useEffect, useRef } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Link
-} from 'react-router-dom';
-import { Stage, Layer, Line, Text, Rect } from 'react-konva';
+import React, { useState, useRef } from "react";
+import { Link } from 'react-router-dom';
+import { Stage, Layer, Line, Rect } from 'react-konva';
 import axios from "axios";
 import Alert from "react-popup-alert"
 
-import Button from './utils/Button.js'
 import './utils/Button.css'
-
 import './App.css'
 
 let alphabet = [
     'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h', 'I', 'i', 'J', 'j', 
-    'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p', 'Q', 'q', 'R', 'r', 'S', 's', 'W', 'w',
-    'X', 'x', 'Y', 'y', 'Z', 'z'
+    'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p', 'Q', 'q', 'R', 'r', 'S', 's', 'T', 't',
+    'U', 'u', 'V', 'v', 'W', 'w', 'X', 'x', 'Y', 'y', 'Z', 'z'
 ]
 
 function Drawer() {
 
-    const [tool, setTool] = React.useState('pen');
-    const [lines, setLines] = React.useState([]);
-    const [curr, setCurr] = React.useState(0); 
-    const [end, setEnd] = React.useState(false); 
-    const [alert, setAlert] = React.useState({
+    const [tool, setTool] = useState('pen');
+    const [lines, setLines] = useState([]);
+    const [curr, setCurr] = useState(0); 
+    const [end, setEnd] = useState(false); 
+    const [alert, setAlert] = useState({
         type: 'error',
-        text: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+        text: ' ',
         show: false
     })
 
-    const isDrawing = React.useRef(false);
-    const stageRef = React.useRef(null); 
+    const isDrawing = useRef(false);
+    const stageRef = useRef(null); 
 
     function onCloseAlert() {
-        setAlert({
-            type: '',
-            text: '',
-            show: false
-        })
-        setCurr((curr) => curr + 1) 
+        setAlert({ type: '', text: '', show: false })
+        // setCurr((curr) => curr + 1) 
         clear()
     }
         
@@ -55,7 +44,6 @@ function Drawer() {
 
     window.addEventListener("beforeunload", (ev) => {  
         ev.preventDefault();
-        console.log("clean")
         let type = "clean"
         axios.post("http://localhost:5000/drawer", {
             inputText: type,
@@ -69,38 +57,19 @@ function Drawer() {
 
     function getButton() {
         if (end) return (
-            <Link to="/drawer">
+            <Link to="/writer">
                 <input name="submit" required type="submit" className="submit" value="submit" />
             </Link>
         )
         else return <h1 className="submit" onClick={(e) => handleSubmit(e)}>next</h1>
     }
 
-    // function to download the png drawn on the canva
-    const downloadURI = (uri, name) => {
-        var link = document.createElement('a');
-        link.download = name;
-        link.href = uri;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
-
-    // handling download
-    const handleExport = () => {
-        const uri = stageRef.current.toDataURL();
-        console.log(uri);
-        downloadURI(uri, 'stage.png');
-    };
-
     const handleSubmit = (e) => {
         e.preventDefault()
-        if (lines.length == 0) {
-            onShowAlert('warning', "submit empty? this letter will be styled in default Arial")
-        } else {
-            if (curr == 44) {
-                setEnd(true)
-            } else setCurr((curr) => curr + 1) 
+        if (lines.length == 0) onShowAlert('warning', "please write something")
+        else {
+            if (curr == 51) setEnd(true)
+            else setCurr((curr) => curr + 1) 
             const uri = stageRef.current.toDataURL();
             const formData = uri;
 
@@ -129,8 +98,6 @@ function Drawer() {
 
     // clearing canva
     const clear = () => {
-        console.log(stageRef)
-        console.log(stageRef.current)
         stageRef.current.clear()
         stageRef.current.clearCache() 
         setLines([])
@@ -191,15 +158,14 @@ function Drawer() {
             <Link to="/"> <h1 className="head_sub">WRITRR</h1> </Link>
             <h1 className="subheader">write for letter '{alphabet[curr]}'</h1>
             <Stage
-                width={window.innerWidth/2}
-                height={window.innerHeight/2}
+                width={window.innerWidth/4}
+                height={window.innerHeight/3}
                 onMouseDown={handleMouseDown}
                 onMousemove={handleMouseMove}
                 onMouseup={handleMouseUp}
                 onTouchStart={handleTouchStart}
                 onTouchMove={handleTouchMove} 
                 onTouchEnd={handleTouchEnd}
-                
                 id="stage"
                 ref={stageRef}
                 className="stage" >
@@ -243,7 +209,7 @@ function Drawer() {
             </div>
             <Alert
                 header={'woah - '}
-                btnText={'yeah ok'}
+                btnText={'close'}
                 text={alert.text}
                 type={alert.type}
                 show={alert.show}

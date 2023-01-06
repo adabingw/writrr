@@ -5,6 +5,7 @@ import sqlite3
 import base64
 import os 
 import opencv 
+import detect
   
 # Initializing flask app
 app = Flask(__name__)
@@ -114,7 +115,6 @@ def drawer():
                 os.remove(file)
 
         else: 
-            
             uri = data['inputText'][22:]
             
             if len(uri) % 4 != 0: 
@@ -124,6 +124,12 @@ def drawer():
             
             with open(path, "wb") as fh:
                 fh.write(base64.b64decode(uri))
+                
+            recognized = detect.pred(path)
+            if recognized == data['symbol']: 
+                print("successfully recognized") 
+            else: 
+                print("not successfully recognized")
         
             if checkExists(data['symbol']): 
                 print("data exists")
@@ -146,22 +152,27 @@ def writer():
         if(os.path.exists(path)):
             os.remove(path)
         
-        dir = "cv_img/"         
+        dir = "cv_img/"
         for file in os.listdir(dir):       
             path = os.path.join(dir, file)         
             os.remove(path)
-        
+          
         for i, t in enumerate(text):
+            print(t)
             padding = 0
             if t.isupper(): 
                 padding = 0
             else: 
                 padding = 1
-            path = "img/{}{}.png".format(t, padding)
-            opencv.draw(path, i, t)            
+                
+            path = "backup/{}{}.png".format(t, padding)
+            if data['type'] == "write": 
+                path = "img/{}{}.png".format(t, padding)
+            opencv.draw(path, i, t, 10)            
         opencv.generate("cv_img/")
         return "ok"
 
-# Running app
 if __name__ == '__main__':
+    # detect.train()
+    # detect.evaluate()
     app.run(debug = True)

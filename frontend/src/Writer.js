@@ -1,11 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
-import Alert from "react-popup-alert"
-import {
-    BrowserRouter as Router,
-    Routes,
-    Route,
-    Link
-} from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { Link } from 'react-router-dom';
 import axios from "axios";
 
 import Button from './utils/Button.js'
@@ -14,7 +8,7 @@ import './utils/Button.css'
 import './App.css'
 
 
-function Writer() {
+function Writer(props) {
 
     const src = require("./images/white.png")
     const [input, setInput] = useState("")
@@ -30,12 +24,19 @@ function Writer() {
     })
 
     const checkSource = () => {
-        try{
+        try {
             const src = require("./images/result.png")
             setSource(src)
         }
-        catch(err){
+        catch(err) {
             console.log("cannot find result")
+        }
+    }
+
+    function keyDown(e) {
+        var code = (e.keyCode ? e.keyCode : e.which);
+        if(code == 13) {
+            handleSubmit(e)
         }
     }
 
@@ -43,7 +44,8 @@ function Writer() {
         e.preventDefault()
         const Upload = async() => {
             axios.post("http://localhost:5000/writer", {
-                text: input 
+                text: input,
+                type: props.type 
             }).then((res) => {
                 console.log("res", res);
             }).catch((err) => {
@@ -68,7 +70,12 @@ function Writer() {
     return (
         <div className="generate_div">
             <Link to="/"> <h1 className="head_sub">WRITRR</h1> </Link>
-            <input type="textarea" rows="1" className="generator" onChange={(e) => inputCheck(e)} value={input} />
+            <input type="textarea" 
+                    rows="1" 
+                    className="generator" 
+                    onChange={(e) => inputCheck(e)} 
+                    value={input} 
+                    onKeyDown={(e) => keyDown(e)} />
             <h1 className="submit" onClick={(e) => handleSubmit(e)}>generate!</h1>
             <img src={source} alt="huh" className="writing" />
             <h1 className="submit" onClick={() => download(source)}>download</h1>

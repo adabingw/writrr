@@ -46,7 +46,8 @@ function App() {
               <Routes>
                 <Route exact path="/" element={<Home />} />
                 <Route exact path="/drawer" element={<Drawer />} />
-                <Route exact path="/writer" element={<Writer />} />
+                <Route exact path="/writer" element={<Writer type="write"/>} />
+                <Route exact path="/demo" element={<Writer type="demo"/>} />
                 <Route exact_path="/*" element={<Error />} />
               </Routes>
             </Router>
