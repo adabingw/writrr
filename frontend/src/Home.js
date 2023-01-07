@@ -17,7 +17,7 @@ function Home() {
                 <Link to="/drawer"> <Button text="get started" type="home_button" /> </Link>
                 <Link to="/demo"> <Button text="see a demo" type="home_button" /> </Link>
             </div>
-            <Link to="/writer"> <p className="description"> shortcut to writer </p> </Link>
+            {/* <Link to="/writer"> <p className="description"> shortcut to writer </p> </Link> */}
         </div>
     );
 }

@@ -158,7 +158,6 @@ def writer():
             os.remove(path)
           
         for i, t in enumerate(text):
-            print(t)
             padding = 0
             if t.isupper(): 
                 padding = 0
