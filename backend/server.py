@@ -5,8 +5,9 @@ import sqlite3
 import base64
 import os 
 import opencv 
-import detect
-  
+# import detect
+import load_model
+
 # Initializing flask app
 app = Flask(__name__)
 
@@ -125,11 +126,13 @@ def drawer():
             with open(path, "wb") as fh:
                 fh.write(base64.b64decode(uri))
                 
-            recognized = detect.pred(path)
-            if recognized == data['symbol']: 
-                print("successfully recognized") 
-            else: 
-                print("not successfully recognized")
+            # recognized = detect.pred(path)
+            # if recognized == data['symbol']: 
+            #     print(recognized)
+            #     print("successfully recognized") 
+            # else: 
+            #     print(recognized)
+            #     print("not successfully recognized")
         
             if checkExists(data['symbol']): 
                 print("data exists")
@@ -174,4 +177,5 @@ def writer():
 if __name__ == '__main__':
     # detect.train()
     # detect.evaluate()
-    app.run(debug = True)
+    load_model.load()
+    # app.run(debug = True)

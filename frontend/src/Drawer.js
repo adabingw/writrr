@@ -182,7 +182,7 @@ function Drawer() {
                         key={i}
                         points={line.points}
                         stroke="#000000"
-                        strokeWidth={4}
+                        strokeWidth={15}
                         tension={0.5}
                         lineCap="round"
                         lineJoin="round"
